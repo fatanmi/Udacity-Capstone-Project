@@ -17,7 +17,7 @@ pipeline {
          }         
         stage('Build Docker') {
       steps {
-	      make build
+	      sh 'make build'
       }
     }
    stage('Deploy our image') {
@@ -29,7 +29,7 @@ pipeline {
    }
    stage('Upload Image') {
       steps {
-	 make upload
+	 sh 'make upload'
       }
     }
    stage('Deploying') {
