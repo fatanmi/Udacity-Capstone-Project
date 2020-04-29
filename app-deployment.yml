@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: nginx
+spec:
+    selector:
+       matchLabels:
+         run: nginx
+    strategy:
+       type: RollingUpdate
+       rollingUpdate:
+           maxUnavailable: 75%
+    replicas: 4
+    template:
+      metadata:
+        labels:
+          run: nginx
+      spec:
+          containers:
+            - name: fintest 
+              imagePullPolicy: Always
+              image: mohmagdy1016/fintest
+              ports:
+              - containerPort: 80
+           
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: LoadBalancer
+  selector:
+    run: nginx
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80

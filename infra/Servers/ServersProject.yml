@@ -1,0 +1,106 @@
+Description: >
+  IaaC project.
+
+
+Parameters:
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+    DesiredInstances:
+        Description: How many instances should be created.
+        Type: Number
+    SshKey:
+        Description: The EC2 Key Pair to allow SSH access to the instances
+        Type: AWS::EC2::KeyPair::KeyName
+
+Resources:
+
+    WorkernodesRole:
+        Type: AWS::IAM::Role
+        Properties:
+          AssumeRolePolicyDocument:
+               Version: '2012-10-17'
+               Statement:
+               - Effect: Allow
+                 Principal:
+                   Service:
+                   - ec2.amazonaws.com
+                 Action:
+                 - sts:AssumeRole
+          Path: "/"
+          ManagedPolicyArns:
+             - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+             - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+             - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+             - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+             - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+
+    ProfileWithRolesForOurApp:
+         Type: AWS::IAM::InstanceProfile
+         Properties:
+            Path: "/"
+            Roles: 
+            - !Ref WorkernodesRole
+ 
+    WebAppLaunchConfig:
+        Type: AWS::AutoScaling::LaunchConfiguration
+        Properties:
+            ImageId: ami-0b41405369376af92
+            IamInstanceProfile: !Ref 'ProfileWithRolesForOurApp' 
+            SecurityGroups:
+            - Fn::ImportValue:
+                 !Sub "${EnvironmentName}-NSG"
+            InstanceType: t3.medium
+            KeyName: !Ref SshKey
+            BlockDeviceMappings:
+            - DeviceName: "/dev/sdk"
+              Ebs:
+                VolumeSize: '10'
+            UserData:
+              Fn::Base64:
+                 !Sub 
+                   - |
+                       #!/bin/bash
+                       set -o xtrace
+                       /etc/eks/bootstrap.sh ${EksId}
+                       /opt/aws/bin/cfn-signal --exit-code $? \
+                         --stack  ${AWS::StackName} \
+                         --resource NodesAutoScalingGroup  \
+                         --region ${AWS::Region}
+                   - EksId:
+                        Fn::ImportValue:
+                           !Sub "${EnvironmentName}-EKS"
+
+    WebAppGroup:
+        Type: AWS::AutoScaling::AutoScalingGroup
+        Properties:
+          DesiredCapacity: !Sub ${DesiredInstances}
+          VPCZoneIdentifier:
+          - Fn::ImportValue:
+              !Sub "${EnvironmentName}-PUB-NETS"
+          LaunchConfigurationName:
+            Ref: WebAppLaunchConfig
+          MinSize: '1'
+          MaxSize: '3'
+          Tags:
+          - Key: Name
+            Value: 
+              !Sub 
+                - "${EksId}-CapstoneNodesGroup-Node"
+                - EksId:
+                    Fn::ImportValue:
+                        !Sub "${EnvironmentName}-EKS"
+            PropagateAtLaunch: 'true'
+          - Key: 
+              !Sub 
+                - "kubernetes.io/cluster/${EksId}"
+                - EksId:
+                    Fn::ImportValue:
+                        !Sub "${EnvironmentName}-EKS"
+            Value: 'owned'
+            PropagateAtLaunch: 'true'
+
+
+    
+
+   
