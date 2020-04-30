@@ -1,4 +1,6 @@
-     export username="mohmagdy1016"
+     sh """\
+     #!/bin/sh
+	 export username="mohmagdy1016"
 	 export path=udacitycapstoneproject
 	 export version=0.1
 	 export dockerpath=$username/$path;
