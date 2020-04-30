@@ -29,7 +29,7 @@ pipeline {
    }
    stage('Upload Image') {
       steps {
-	       sh "upload_docker.sh"
+	       sh "./upload_docker.sh"
       }
     }
    stage('Deploying') {
