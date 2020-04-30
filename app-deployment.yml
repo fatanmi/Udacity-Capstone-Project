@@ -17,9 +17,9 @@ spec:
           run: nginx
       spec:
           containers:
-            - name: fintest 
+            - name: udacitycapstoneproject 
               imagePullPolicy: Always
-              image: mohmagdy1016/fintest
+              image: mohmagdy1016/udacitycapstoneproject
               ports:
               - containerPort: 80
            
