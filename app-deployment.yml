@@ -11,9 +11,8 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 75%
-  progressDeadlineSeconds: 1200
-  minReadySeconds: 60
+      maxUnavailable: 50%
+      maxSurge: 50%
   template:
     metadata:
       labels:
