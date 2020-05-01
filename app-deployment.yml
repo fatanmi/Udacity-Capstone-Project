@@ -49,7 +49,7 @@ spec:
     apiVersion: extensions/v1beta1
     kind: Deployment
     name: ngnix-deployment
-  minReplicas: 2
+  minReplicas: 3
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
     
