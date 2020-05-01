@@ -23,7 +23,7 @@ spec:
       
       containers:
       - name: udacitycapstoneproject
-        image: mohmagdy1016/udacitycapstoneproject:latest
+        image: mohmagdy1016/udacitycapstoneproject:$tag
         imagePullPolicy: Always
         ports:
         - containerPort: 80
