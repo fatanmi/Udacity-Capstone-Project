@@ -17,7 +17,7 @@ pipeline {
          }         
         stage('Build Docker') {
       steps {
-	      sh 'docker build --build-arg APP_PORT=80 --tag=mohmagdy1016/udacitycapstoneproject .'
+	      sh "./build_docker.sh"
       }
     }
    stage('Deploy our image') {
@@ -36,7 +36,7 @@ pipeline {
 	   steps {
 		   withAWS(credentials: 'Devops', region: 'us-east-2') {
                  sh 'aws eks update-kubeconfig --name CapstoneEKS-trEqHpGliSRH'
-	         sh 'kubectl set image deployments/ngnix-deployment *=mohmagdy1016/udacitycapstoneproject:latest'
+	               sh 'kubectl set image deployments/ngnix-deployment *=mohmagdy1016/udacitycapstoneproject:latest'
                  sh 'kubectl apply -f app-deployment.yml'
 	            
 }
