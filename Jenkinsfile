@@ -38,6 +38,8 @@ pipeline {
                  sh 'aws eks update-kubeconfig --name CapstoneEKS-trEqHpGliSRH'
 	               sh 'kubectl set image deployments/ngnix-deployment *=mohmagdy1016/udacitycapstoneproject:latest'
                  sh 'kubectl apply -f app-deployment.yml'
+                 sh 'kubectl get nodes'
+                 sh 'kubectl get pods'
 	            
 }
 	   }
