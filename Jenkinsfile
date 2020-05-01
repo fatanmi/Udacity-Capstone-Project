@@ -15,7 +15,7 @@ pipeline {
                  aquaMicroscanner imageName: 'alpine:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
               }
          }         
-        stage('Build Docker') {
+        stage('Build Docker image') {
       steps {	      
       sh 'docker build --build-arg APP_PORT=80 --tag=mohmagdy1016/udacitycapstoneproject .'
       }
