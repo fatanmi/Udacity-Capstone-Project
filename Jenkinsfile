@@ -20,19 +20,19 @@ pipeline {
       sh 'docker build --build-arg APP_PORT=80 --tag=mohmagdy1016/udacitycapstoneproject .'
       }
     }
-   stage('Deploy our image') {
+   stage('login to docker hub') {
    steps{
    withCredentials([usernamePassword(credentialsId: 'dockerhubusr', passwordVariable: 'dockerhubusrPassword', usernameVariable: 'dockerhubusrUser')]) {
 	     	sh "docker login -u ${env.dockerhubusrUser} -p ${env.dockerhubusrPassword}"
    }
    }
    }
-   stage('Upload Image') {
+   stage('Upload Image to docker hub') {
       steps {
 	       sh "./upload_docker.sh"
       }
     }
-   stage('Deploying') {
+   stage('kubernetes deployment') {
 	   steps {
 		   withAWS(credentials: 'Devops', region: 'us-east-2') {
                  sh 'aws eks update-kubeconfig --name CapstoneEKS-trEqHpGliSRH'
