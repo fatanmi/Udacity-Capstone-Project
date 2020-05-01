@@ -36,7 +36,6 @@ pipeline {
 	   steps {
 		   withAWS(credentials: 'Devops', region: 'us-east-2') {
                  sh 'aws eks update-kubeconfig --name CapstoneEKS-trEqHpGliSRH'
-	         sh 'kubectl apply -f k8s/aws-auth-cm.yml'
 	         sh 'kubectl set image deployments/ngnix-deployment *=mohmagdy1016/udacitycapstoneproject:latest'
                  sh 'kubectl apply -f app-deployment.yml'
 	            
