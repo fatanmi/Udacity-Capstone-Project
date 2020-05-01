@@ -16,8 +16,8 @@ pipeline {
               }
          }         
         stage('Build Docker') {
-      steps {
-	      sh "./build_docker.sh"
+      steps {	      
+      sh 'docker build --build-arg APP_PORT=80 --tag=mohmagdy1016/udacitycapstoneproject .'
       }
     }
    stage('Deploy our image') {
