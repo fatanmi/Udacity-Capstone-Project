@@ -11,9 +11,6 @@ spec:
   replicas: 2
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 50%
-      maxSurge: 50%
   template:
     metadata:
       labels:
