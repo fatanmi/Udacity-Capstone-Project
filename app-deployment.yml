@@ -11,8 +11,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+      maxUnavailable: 50%
   progressDeadlineSeconds: 1200
   minReadySeconds: 60
   template:
@@ -53,6 +52,6 @@ spec:
     apiVersion: extensions/v1beta1
     kind: Deployment
     name: ngnix-deployment
-  minReplicas: 3
+  minReplicas: 2
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
