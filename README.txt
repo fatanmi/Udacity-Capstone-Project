@@ -17,6 +17,8 @@ nginx        LoadBalancer   172.20.237.18   aee6ee3ff06f240cc80c334bf5973375-145
 use URL:  http://a5525ad51ea8e456985f27a3c7ef7b32-1914386154.us-east-2.elb.amazonaws.com/
 7- deployment process is automated using jenkins pipeline , docker image , kubernetes deploymeny (rolling update)
 
+GitHub URL:
+   https://github.com/mohmagdy1016/Udacity-Capstone-Project.git
 
 **Note**
   Kindly confirm when I can delete cloudformation Stacks and all project resources.
